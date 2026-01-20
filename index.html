@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>365DAY</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Backdrop -->
+  <div id="backdrop" hidden aria-hidden="true"></div>
+
+  <!-- Drawer -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-brand">
+        <div class="brand-title">365DAY</div>
+        <div class="brand-sub">твой марафон</div>
+      </div>
+
+      <button id="btnCloseMenu" class="icon-btn" type="button" aria-label="Закрыть меню">
+        ✕
+      </button>
+    </div>
+
+    <div class="drawer-mini">
+      <div class="mini">
+        <div class="mini-label">Бонусы</div>
+        <div class="mini-value"><span id="miniBalance">0</span> ⭐</div>
+      </div>
+      <div class="mini">
+        <div class="mini-label">Streak</div>
+        <div class="mini-value"><span id="miniStreak">0</span> д</div>
+      </div>
+      <div class="mini">
+        <div class="mini-label">Ранг</div>
+        <div class="mini-value">#<span id="miniRank">1</span></div>
+      </div>
+    </div>
+
+    <nav class="drawer-nav">
+      <button class="drawer-item" type="button" data-nav="home">Статус</button>
+      <button class="drawer-item" type="button" data-nav="today">Сегодня</button>
+      <button class="drawer-item" type="button" data-nav="water">Вода</button>
+      <button class="drawer-item" type="button" data-nav="calories">Калории</button>
+      <button class="drawer-item" type="button" data-nav="goals">Цели</button>
+      <button class="drawer-item" type="button" data-nav="templates">Шаблоны</button>
+      <button class="drawer-item" type="button" data-nav="shop">Магазин</button>
+      <button class="drawer-item" type="button" data-nav="achievements">Достижения</button>
+      <button class="drawer-item" type="button" data-nav="analytics">Аналитика</button>
+      <button class="drawer-item" type="button" data-nav="settings">Настройки</button>
+    </nav>
+
+    <div class="drawer-foot muted small">
+      Данные хранятся локально (localStorage)
+    </div>
+  </aside>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <button id="btnOpenMenu" class="icon-btn" type="button" aria-label="Открыть меню">
+      ☰
+    </button>
+
+    <div class="topbar-center">
+      <div class="app-title">365DAY</div>
+      <div id="headerDayText" class="dayline">День 1/365</div>
+    </div>
+
+    <div class="topbar-right">
+      <button id="btnPrevCard" class="nav-btn" type="button" aria-label="Влево">‹</button>
+      <button id="btnNextCard" class="nav-btn" type="button" aria-label="Вправо">›</button>
+      <button id="btnCalendar" class="icon-btn" type="button" aria-label="Календарь">📅</button>
+    </div>
+  </header>
+
+  <!-- Cards stage -->
+  <main class="cardstage" aria-live="polite">
+
+    <!-- HOME / STATUS -->
+    <section class="card is-active" data-screen="home" id="screenHome">
+      <div class="card-head">
+        <h2 class="card-title">Статус</h2>
+        <div class="card-sub" id="uiDayFull">—</div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="grid-2">
+          <div class="statbox">
+            <div class="stat-label">Уровень</div>
+            <div class="stat-value" id="uiLevel">20 / 365</div>
+          </div>
+          <div class="statbox">
+            <div class="stat-label">Ранг</div>
+            <div class="stat-value" id="uiRank">1 — Начало 🚀</div>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="statbox">
+            <div class="stat-label">Бонусы</div>
+            <div class="stat-value"><span id="uiBalance">0</span> ⭐</div>
+          </div>
+          <div class="statbox">
+            <div class="stat-label">Streak</div>
+            <div class="stat-value" id="uiStreak">0 дней</div>
+          </div>
+          <div class="statbox">
+            <div class="stat-label">Бонус дня</div>
+            <div class="stat-value" id="uiDailyBonus">+20</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <div class="progress-title">Задачи</div>
+            <div class="progress-right">
+              <span id="uiTasksDone">0 / 0</span>
+            </div>
+          </div>
+          <div class="progressbar">
+            <div class="progressbar-fill" id="homeTasksFill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <div class="progress-title">Вода</div>
+            <div class="progress-right">
+              <span id="uiWaterMini">0 мл / 2500 мл</span>
+            </div>
+          </div>
+          <div class="progressbar">
+            <div class="progressbar-fill" id="homeWaterFill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <div class="progress-title">Калории</div>
+            <div class="progress-right">
+              <span id="uiCaloriesMini">0 ккал</span>
+            </div>
+          </div>
+          <div class="progressbar">
+            <div class="progressbar-fill" id="homeCaloriesFill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="grid-2">
+          <div class="statbox soft">
+            <div class="stat-label">Заработано сегодня</div>
+            <div class="stat-value" id="uiEarnedToday">+0</div>
+          </div>
+          <div class="statbox soft">
+            <div class="stat-label">Потенциал</div>
+            <div class="stat-value" id="uiPotential">+0</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TODAY -->
+    <section class="card" data-screen="today" id="screenToday" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Сегодня</h2>
+        <div class="card-sub" id="todayDateLine">—</div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="today-top">
+          <div class="today-progress">
+            <div class="progressbar large">
+              <div class="progressbar-fill" style="width:0%"></div>
+            </div>
+            <div class="today-progress-text">
+              Выполнено: <strong id="todayProgressText">0%</strong>
+            </div>
+          </div>
+
+          <div class="today-actions">
+            <button class="btn primary" type="button" data-action="add-task">+ Добавить задачу</button>
+            <button class="btn success" type="button" id="btnClaimDailyBonus" hidden>Забрать бонус дня</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <ul id="todayTaskList" class="task-list">
+          <!-- JS заполнит -->
+        </ul>
+
+      </div>
+    </section>
+
+    <!-- WATER -->
+    <section class="card" data-screen="water" id="screenWater" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Вода</h2>
+        <div class="card-sub">Следи за нормой</div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="grid-2">
+          <div class="statbox">
+            <div class="stat-label">Выпито</div>
+            <div class="stat-value" id="waterDrank">0 мл</div>
+          </div>
+          <div class="statbox">
+            <div class="stat-label">Цель</div>
+            <div class="stat-value" id="waterGoal">2500 мл</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="progress-block">
+          <div class="progress-head">
+            <div class="progress-title">Прогресс</div>
+            <div class="progress-right"><span id="waterPercent">0%</span></div>
+          </div>
+          <div class="progressbar">
+            <div class="progressbar-fill fill" data-fill="water" style="width:0%"></div>
+          </div>
+          <div class="muted small">Стаканы (по 200 мл): <strong id="waterGlasses">0</strong></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="chip-row">
+          <button class="chip" type="button" data-action="water-add" data-ml="200">+200</button>
+          <button class="chip" type="button" data-action="water-add" data-ml="300">+300</button>
+          <button class="chip" type="button" data-action="water-add" data-ml="500">+500</button>
+          <button class="chip danger" type="button" data-action="water-reset">Сброс</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <label class="field">
+          <span class="field-label">Цель воды (мл)</span>
+          <input id="waterGoalInput" class="input" inputmode="numeric" placeholder="2500" />
+          <span class="field-hint muted small">Сохраняется в “Настройках” после сохранения</span>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- CALORIES -->
+    <section class="card" data-screen="calories" id="screenCalories" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Калории</h2>
+        <div class="card-sub">Внеси то, что съела</div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="grid-2">
+          <div class="statbox">
+            <div class="stat-label">Сегодня</div>
+            <div class="stat-value" id="caloriesToday">0 ккал</div>
+          </div>
+          <div class="statbox">
+            <div class="stat-label">Прогресс (условно)</div>
+            <div class="stat-value muted">к цели 2500</div>
+          </div>
+        </div>
+
+        <div class="progressbar">
+          <div class="progressbar-fill fill" data-fill="calories" style="width:0%"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row">
+          <input id="caloriesInput" class="input" inputmode="numeric" placeholder="Например: 350" />
+          <button class="btn primary" type="button" data-action="cal-add">Добавить</button>
+          <button class="btn danger" type="button" data-action="cal-reset">Сброс</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <ul id="caloriesLog" class="list">
+          <!-- JS заполнит -->
+        </ul>
+
+      </div>
+    </section>
+
+    <!-- GOALS -->
+    <section class="card" data-screen="goals" id="screenGoals" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Цели</h2>
+        <div class="card-sub">Двигайся маленькими шагами</div>
+      </div>
+
+      <div class="card-body">
+        <button class="btn primary" type="button" data-action="goal-add">+ Добавить цель</button>
+        <div class="divider"></div>
+
+        <ul id="goalsList" class="list">
+          <!-- JS -->
+        </ul>
+      </div>
+
+      <template id="goalItemTemplate">
+        <li class="goal-item">
+          <div class="goal-top">
+            <div>
+              <div class="goal-title">Цель</div>
+              <div class="muted small goal-meta">0 / 10</div>
+            </div>
+            <div class="goal-right">
+              <span class="pill"><span class="goal-progress-text">0%</span></span>
+            </div>
+          </div>
+
+          <div class="progressbar">
+            <div class="progressbar-fill" style="width:0%"></div>
+          </div>
+
+          <div class="goal-actions">
+            <button class="chip" type="button" data-action="goal-minus">−</button>
+            <button class="chip" type="button" data-action="goal-plus">+</button>
+            <button class="chip" type="button" data-action="goal-edit">Редакт.</button>
+            <button class="chip danger" type="button" data-action="goal-delete">Удалить</button>
+          </div>
+        </li>
+      </template>
+    </section>
+
+    <!-- TEMPLATES -->
+    <section class="card" data-screen="templates" id="screenTemplates" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Шаблоны</h2>
+        <div class="card-sub">Быстро добавляй набор задач</div>
+      </div>
+
+      <div class="card-body">
+
+        <label class="field">
+          <span class="field-label">Название шаблона</span>
+          <input id="tplName" class="input" placeholder="Например: Утро" />
+        </label>
+
+        <label class="field">
+          <span class="field-label">Задачи (каждая с новой строки)</span>
+          <textarea id="tplTasks" class="textarea" rows="6" placeholder="Вода&#10;Зарядка&#10;Чтение"></textarea>
+        </label>
+
+        <button class="btn primary" type="button" data-action="tpl-create">Создать шаблон</button>
+
+        <div class="divider"></div>
+
+        <ul id="templatesList" class="list">
+          <!-- JS -->
+        </ul>
+
+      </div>
+
+      <template id="templateItemTemplate">
+        <li class="template-item">
+          <div class="template-left">
+            <div class="template-title">Шаблон</div>
+            <div class="muted small">Задач: <span class="template-count">0</span></div>
+          </div>
+          <div class="template-right">
+            <button class="chip" type="button" data-action="tpl-apply" data-template-id="">Применить</button>
+            <button class="chip danger" type="button" data-action="tpl-delete" data-template-id="">Удалить</button>
+          </div>
+        </li>
+      </template>
+    </section>
+
+    <!-- SHOP -->
+    <section class="card" data-screen="shop" id="screenShop" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Магазин</h2>
+        <div class="card-sub">Трать бонусы на награды</div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="grid-2">
+          <div class="statbox">
+            <div class="stat-label">Баланс</div>
+            <div class="stat-value"><span id="shopBalance">0</span> ⭐</div>
+          </div>
+          <div class="statbox soft">
+            <div class="stat-label muted">Подсказка</div>
+            <div class="muted small">Выбирай награду и нажимай “Купить”</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="shop-card">
+          <div class="shop-photo">
+            <img id="shopItemPhoto" src="shop-default.jpg" alt="Награда" />
+          </div>
+          <div class="shop-info">
+            <div class="shop-emoji" id="shopItemEmoji">🎁</div>
+            <div class="shop-name" id="shopItemName">—</div>
+            <div class="shop-price">
+              <span id="shopItemPrice">0</span><span id="shopItemCurrency">⭐</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="shop-actions">
+          <button class="nav-btn" type="button" data-action="shop-prev" aria-label="Предыдущая">‹</button>
+          <button class="btn success" type="button" data-action="shop-buy">Купить</button>
+          <button class="nav-btn" type="button" data-action="shop-next" aria-label="Следующая">›</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <details class="panel">
+          <summary>Добавить / редактировать товары</summary>
+
+          <div class="row">
+            <input id="shopEmoji" class="input" placeholder="Эмодзи (🎁)" />
+            <input id="shopName" class="input" placeholder="Название" />
+            <input id="shopPrice" class="input" inputmode="numeric" placeholder="Цена" />
+          </div>
+
+          <div class="row">
+            <button class="btn primary" type="button" data-action="shop-add">Добавить</button>
+            <input id="shopEditLineInput" class="input" placeholder="эмодзи | имя | цена" />
+            <button class="btn" type="button" data-action="shop-edit">Применить</button>
+            <button class="btn danger" type="button" data-action="shop-delete">Удалить текущий</button>
+          </div>
+        </details>
+
+        <div class="divider"></div>
+
+        <div class="panel">
+          <div class="panel-title">История</div>
+          <ul id="shopHistory" class="list"></ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ACHIEVEMENTS -->
+    <section class="card" data-screen="achievements" id="screenAchievements" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Достижения</h2>
+        <div class="card-sub">Открывай новые значки</div>
+      </div>
+
+      <div class="card-body">
+        <ul id="achievementsList" class="ach-list">
+          <!-- JS: будет >60 -->
+        </ul>
+      </div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section class="card" data-screen="analytics" id="screenAnalytics" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Аналитика</h2>
+        <div class="card-sub">7 дней / месяц / 12 месяцев</div>
+      </div>
+
+      <div class="card-body">
+
+        <div class="grid-3">
+          <div class="statbox">
+            <div class="stat-label">Задач выполнено</div>
+            <div class="stat-value" id="anTasksDone">0</div>
+          </div>
+          <div class="statbox">
+            <div class="stat-label">Дней закрыто</div>
+            <div class="stat-value" id="anDaysClosed">0</div>
+          </div>
+          <div class="statbox">
+            <div class="stat-label">Streak</div>
+            <div class="stat-value" id="anStreak">0</div>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="statbox soft">
+            <div class="stat-label">Заработано</div>
+            <div class="stat-value" id="anEarnedTotal">0</div>
+          </div>
+          <div class="statbox soft">
+            <div class="stat-label">Потрачено</div>
+            <div class="stat-value" id="anSpentTotal">0</div>
+          </div>
+          <div class="statbox soft">
+            <div class="stat-label">Баланс</div>
+            <div class="stat-value" id="anBalance">0</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="chip-row">
+          <button class="chip" type="button" data-action="analytics-week">7 дней</button>
+          <button class="chip" type="button" data-action="analytics-month">Месяц</button>
+          <button class="chip" type="button" data-action="analytics-year">12 месяцев</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div id="analyticsOutput" class="analytics-out">
+          <!-- JS -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="card" data-screen="settings" id="screenSettings" hidden>
+      <div class="card-head">
+        <h2 class="card-title">Настройки</h2>
+        <div class="card-sub">Управляй марафоном</div>
+      </div>
+
+      <div class="card-body">
+
+        <label class="field">
+          <span class="field-label">Дата старта (ISO)</span>
+          <input id="setStartDate" class="input" placeholder="2026-01-20" />
+        </label>
+
+        <label class="field">
+          <span class="field-label">Бонус дня (⭐)</span>
+          <input id="setDailyBonus" class="input" inputmode="numeric" placeholder="20" />
+        </label>
+
+        <label class="field">
+          <span class="field-label">Цель воды (мл)</span>
+          <input id="setWaterGoal" class="input" inputmode="numeric" placeholder="2500" />
+        </label>
+
+        <div class="row">
+          <button id="btnSaveSettings" class="btn primary" type="button">Сохранить</button>
+          <button id="btnResetProgress" class="btn danger" type="button">Обнулить прогресс</button>
+        </div>
+
+        <div class="divider"></div>
+        <p class="muted small">
+          Обнуление удалит задачи, бонусы, streak, аналитику, магазин и достижения.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
